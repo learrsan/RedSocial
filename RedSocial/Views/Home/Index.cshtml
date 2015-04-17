@@ -1,0 +1,60 @@
+﻿@model IEnumerable<RedSocialWebApi.Models.MensajePublico>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div id="resultado">
+    @Html.Partial("_ListadoMensajesPublicos",Model)
+</div>
+<a href="#" id="lnkNuevo">Nuevo</a>
+
+
+<div class="modal fade" id="Dialogo">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Nuevo comentario</h4>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="txtAsunto" placeholder="Asunto"/><br/>
+                <textarea id="txtMensaje" placeholder="Mensaje"></textarea>
+            </div>
+            <div class="modal-footer">
+                
+                <button type="button" id="btnEnviar" class="btn btn-primary">Enviar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+    (function() {
+        $("#lnkNuevo").click(function() {
+            $("#Dialogo").modal();
+        });
+        $("#btnEnviar").click(function () {
+            
+            var obj = {
+                asunto: $("#txtAsunto").val(),
+                texto: $("#txtMensaje").val()
+            };
+            var objtxt = JSON.stringify(obj);
+            $.ajax(
+            {
+                url: "/Home/NuevoMensaje",
+                data: objtxt,
+                contentType: "application/json",
+                type: "POST",
+                dataType: "json",
+                success: function() {
+                    $("#resultado").load("/Home/ObtenerMensaje");
+                }
+            });
+
+
+        });
+    })();
+
+</script>

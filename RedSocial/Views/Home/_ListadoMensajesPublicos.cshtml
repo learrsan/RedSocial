@@ -1,0 +1,29 @@
+﻿@model IEnumerable<RedSocialWebApi.Models.MensajePublico>
+
+
+<table class="table">
+    <tr>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.asunto)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.texto)
+        </th>
+        
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.asunto)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.texto)
+        </td>
+        
+    </tr>
+}
+
+</table>
