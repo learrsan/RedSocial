@@ -5,13 +5,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Web;
-using RedSocial.Utilidades;
+using System.Text;
 using System.Threading.Tasks;
+using RedSocial.Utilidades;
 
 namespace RedSocial.Servicios
 {
-    public class BaseServicios<T>
+    public class BaseServicios<T> where T:class 
     {
         public String Url { get; set; }
 
@@ -26,7 +26,7 @@ namespace RedSocial.Servicios
         {
             List<T> lista;
             var cl = WebRequest.Create(Url);
-            
+            //cl.Credentials = new NetworkCredential("luis.gil@tajamar365.com", "123456");
 
 
             cl.Method = "GET";
@@ -67,19 +67,26 @@ namespace RedSocial.Servicios
 
 
             cl.Method = "GET";
-            var res = cl.GetResponse();
-            using (var stream = res.GetResponseStream())
+            try
             {
-                using (var reader = new StreamReader(stream))
+                var res = cl.GetResponse();
+                using (var stream = res.GetResponseStream())
                 {
-                    var resultado = reader.ReadToEnd();
-                    dato = Serializador.Deserializar<T>(resultado);
+                    using (var reader = new StreamReader(stream))
+                    {
+                        var resultado = reader.ReadToEnd();
+                        dato = Serializador.Deserializar<T>(resultado);
 
 
+                    }
                 }
-            }
 
-            return dato;
+                return dato;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
 
         }
 
@@ -134,8 +141,6 @@ namespace RedSocial.Servicios
                         contenido);
                 }
             }
-
-
         }
 
         public async Task Delete(int id)
